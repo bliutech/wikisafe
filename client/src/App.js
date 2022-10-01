@@ -2,21 +2,30 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 
 import "./App.css";
 
-import { Home } from "./pages/Home.js";
-import { Article } from "./pages/Article.js";
+import { Home } from "./pages/Home";
+import { Article } from "./pages/Article";
+import { Edit } from "./pages/Edit";
+
+import { NavigationBar } from "./components/NavigationBar";
 
 function App() {
   return (
-    <div className="body">
-      <HashRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route
-            path="/article"
-            element={<Article link="../articles/ucla.md" />}
-          />
-        </Routes>
-      </HashRouter>
+    <div>
+      <div>
+        <HashRouter>
+          <NavigationBar />
+
+          <div className="content">
+            <div className="body">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/a/:articleID" element={<Article />} />
+                <Route path="/e/:articleID" element={<Edit />} />
+              </Routes>
+            </div>
+          </div>
+        </HashRouter>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,17 @@
+{
+  "name": "blockchain",
+  "version": "1.0.0",
+  "description": "\"Blockchain used to stake articles for Wikisafe\"",
+  "main": "truffle-config.js",
+  "scripts": {
+    "dev": "lite-server",
+    "test": "echo \\\"Error: no test specified\\\" && sexit 1"
+  },
+  "author": "bliutech",
+  "license": "ISC",
+  "dependencies": {
+    "lite-server": "^2.6.1",
+    "truffle": "^5.5.32",
+    "truffle-contract": "^4.0.31"
+  }
+}
