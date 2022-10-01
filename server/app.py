@@ -68,7 +68,7 @@ def get_all_users():
     print(User.query.all(), file=sys.stderr)
     return ""
 
-# filesys stuff
+# filesystem
 class File(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     article_id = db.Column(db.String, unique=True, nullable=False)
@@ -84,41 +84,43 @@ class File(db.Model):
 @app.route("/article", methods=['GET','POST','PUT','DELETE'])
 def article():
   a_id = request.form.get('article_id')
-  
   f = File.query.filter_by(article_id=a_id).first()
 
+  # creating article
   if request.method == 'POST':
     if f:
       return "file already exists", 401
 
+    new_text = request.form.get('new_text')
     user = request.form.get('user')
     date = request.form.get('date')
 
     if not a_id or not user or not date:
       return "bad parameters", 400
     
-    new_text = request.form.get('new_text')
     f = File(
       article_id=a_id,
       file_name=f"{a_id}.md",
       author=user,
       date_created=date
     )
+    
     with open(f"{os.getcwd()}/articles/{a_id}.md", 'w') as w:
       w.write(new_text)
 
     db.session.add(f)
     db.session.commit()
     return "success", 200
-  
+
   if not f:
     return "file not found", 404
 
+  # getting article
   if request.method == 'GET':
-
     with open("articles/" + f.file_name, 'r') as w:
       return w.read(), 200
 
+  # updating article
   elif request.method == 'PUT':
     new_text = request.form.get('new_text')
     user = request.form.get('user')
@@ -137,6 +139,7 @@ def article():
 
     return "success", 200
 
+  # deleting article
   elif request.method == 'DELETE':
     # delete file
     os.remove(f"{os.getcwd()}/articles/{a_id}.md")
