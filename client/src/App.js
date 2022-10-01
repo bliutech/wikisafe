@@ -5,6 +5,8 @@ import "./App.css";
 import { Home } from "./pages/Home";
 import { Article } from "./pages/Article";
 import { Edit } from "./pages/Edit";
+import { SignIn } from "./pages/SignIn";
+import { SignUp } from "./pages/SignUp";
 
 import { NavigationBar } from "./components/NavigationBar";
 
@@ -21,6 +23,8 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/a/:articleID" element={<Article />} />
                 <Route path="/e/:articleID" element={<Edit />} />
+                <Route path="/signin" element={<SignIn />} />
+                <Route path="/signup" element={<SignUp />} />
               </Routes>
             </div>
           </div>

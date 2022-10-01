@@ -5,6 +5,7 @@ import { Article } from "../pages/Article";
 
 import { articles } from "../api/articles";
 
+
 function Editor() {
   const [editorText, setEditorText] = useState(null);
   const { articleID } = useParams();
@@ -41,7 +42,7 @@ function Editor() {
         <button onClick={handleSave}>Save</button>
       </div>
       <div className="editor-preview">
-        <Article key={editorText} text={editorText} />
+        <Article text={editorText} />
       </div>
     </div>
   );

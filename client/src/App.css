@@ -5,7 +5,7 @@
 
 :root {
   /* sizes */
-  --scale: min(max(min(1vw, 1vh), 3.6px), 10.8px);
+  --scale: min(max(min(1vw, 1.5vh), 3.6px), 10.8px);
   --bar-ratio: 20;
   --page-width: min(
     calc(125 * var(--scale)),
@@ -150,10 +150,34 @@ td {
   color: var(--color-text-link-emph);
 }
 
+.navigation-account {
+  position: fixed;
+  bottom: 0;
+  margin: 0 0 calc(2.0 * var(--scale)) 0;
+}
+
+input {
+  background: var(--color-background);
+  color: var(--color-text-body);
+  font-size: calc(2.0 * var(--scale));
+  font-family: var(--font-serif);
+  border-style: solid;
+  border-color: var(--color-text-main);
+  border-width: calc(0.15 * var(--scale));
+  border-radius: calc(1 * var(--scale));
+  padding: calc(0.5 * var(--scale)) calc(1 * var(--scale))
+    calc(0.5 * var(--scale)) calc(1 * var(--scale));
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--color-text-main);
+}
+
 textarea {
   background: var(--color-background);
   color: var(--color-text-body);
-  font-size: calc(2 * var(--scale));
+  font-size: calc(1.75 * var(--scale));
   font-family: var(--font-serif);
   border-style: solid;
   border-color: var(--color-text-main);
@@ -208,4 +232,44 @@ button:hover {
   height: calc(0.4 * 100vh);
   overflow: scroll;
   margin: calc(2 * var(--scale)) 0 0 0;
+}
+
+.form-table {
+  border: none;
+  border-collapse: collapse;
+  margin: 0 0 calc(2.0 * var(--scale)) 0;
+}
+
+.form-table td {
+  border: none;
+  padding: 0 0 0 0;
+}
+
+.form-label {
+  align-items: left;
+  margin: calc(0.5 * var(--scale)) calc(1.5 * var(--scale)) calc(0.5 * var(--scale)) 0;
+  white-space: nowrap;  /* prevent multi-line cell */
+}
+
+.form-input {
+  align-items: right;
+  width: calc(100%);
+  box-sizing: border-box;
+  margin: calc(0.5 * var(--scale)) 0 calc(0.5 * var(--scale)) 0;
+}
+
+.form-input[type="file"]:hover {
+  background-color: var(--highlight-background-color);
+}
+
+.form-input-cell {
+  width: 100%;
+}
+
+.form-button {
+  text-align: right;
+}
+
+.form-button button {
+  width: calc(10.0 * var(--scale));
 }

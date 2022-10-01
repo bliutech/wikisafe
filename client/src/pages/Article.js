@@ -6,6 +6,7 @@ import DOMPurify from "dompurify";
 
 import { articles } from "../api/articles";
 
+
 function Article(props) {
   const [article, setArticle] = useState("");
   const { articleID } = useParams();
@@ -13,7 +14,11 @@ function Article(props) {
   function getTitle(text) {
     let start = text.indexOf("#") + 1;
     let end = text.indexOf("\n\n", start);
-    return text.slice(start, end);
+    if (start == 0) {
+      return "Unnamed Article"
+    } else {
+      return text.slice(start, end);
+    }
   }
 
   function toHTML(text) {
@@ -30,7 +35,7 @@ function Article(props) {
       setArticle(articlePlain);
     }
     document.title = getTitle(article);
-  }, [article, articleID]);
+  }, [article, props.text, articleID]);
 
   return <div dangerouslySetInnerHTML={{ __html: toHTML(article) }}></div>;
 }
