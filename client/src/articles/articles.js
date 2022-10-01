@@ -1,5 +1,6 @@
 function articles(name) {
   switch(name) {
+
     case "ucla":
       return `
 # University of California, Los Angeles
@@ -31,6 +32,20 @@ print("Hello, World!")
 | Prateik | Benson | Jeffrey | Jordan    |
 
 **Text** of *all*&mdash;varieties! Make sure to drink lots of H<sub>2</sub>O :) Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+      `;
+
+    case "mit":
+      return `
+# Massachusetts Institute of Technology
+
+![MIT Great Dome](https://news.mit.edu/sites/default/files/download/201810/MIT-Computer-Announce-01-PRESS.jpg)
+<figcaption> MIT Great Dome, a famous building on campus.</figcaption>
+
+The Massachusetts Institute of Technology (MIT) is a private land-grant research university in Cambridge, Massachusetts. Established in 1861, MIT has since played a key role in the development of modern technology and science, ranking among the top academic institutions in the world.
+
+## Campus
+
+MIT's 166-acre (67.2 ha) campus in the city of Cambridge spans approximately a mile along the north side of the Charles River basin. The campus is divided roughly in half by Massachusetts Avenue, with most dormitories and student life facilities to the west and most academic buildings to the east. The bridge closest to MIT is the Harvard Bridge, which is known for being marked off in a non-standard unit of length &ndash; the smoot.
       `;
     }
 }
