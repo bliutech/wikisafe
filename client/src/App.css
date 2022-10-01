@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Vollkorn:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
+
+
+:root {
+  /* sizes */
+  --scale: min(max(min(1vw, 1vh), 3.6px), 10.8px);
+  --page-width: min(calc(90 * var(--scale)), 90vw);
+
+  /* colors */
+  --color-background: #ffffff;
+  --color-background-accent: #cccccc;
+  --color-text-main: #000000;
+  --color-text-body: #222222;
+  --color-text-sub: #666666;
+
+  /* font */
+  --font-sans-serif: "IBM Plex Sans", "Arial", sans-serif;
+  --font-serif: "Vollkorn", serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+.body {
+  align-self: center;
+  width: var(--page-width);
+  margin: auto;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-text-main);
+  width: 100%;
+  font-family: var(--font-serif);
+  font-size: calc(2.0 * var(--scale));
+  font-weight: 400;
+  margin: 0;
+}
+
+h1 {
+  font-family: var(--font-sans-serif);
+  font-size: calc(4.0 * var(--scale));
+  font-weight: 800;
+}
+
+h2 {
+  font-family: var(--font-sans-serif);
+  font-size: calc(3.0 * var(--scale));
+  font-weight: 800;
+}
+
+h3 {
+  font-family: var(--font-sans-serif);
+  font-size: calc(2.5 * var(--scale));
+  font-weight: 800;
+}
+
+p {
+  color: var(--color-text-body);
+}
+
+sup {
+  vertical-align: top;
+}
+
+sub {
+  vertical-align: bottom;
+}
+
+img {
+  width: var(--page-width);
+}
+
+figcaption {
+  color: var(--color-text-sub);
+  font-style: italic;
+  margin-top: calc(-2.0 * var(--scale));
+}
+
+table, th, td {
+  width: var(--page-width);
+  text-align: left;
+  border: calc(0.15 * var(--scale)) solid;
+  border-collapse: collapse;
+  padding: calc(0.25 * var(--scale))
+           calc(0.75 * var(--scale))
+           calc(0.0 * var(--scale))
+           calc(0.75 * var(--scale));
+}
