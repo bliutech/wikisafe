@@ -4,8 +4,7 @@ import { useParams } from "react-router-dom";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 
-import { articles } from "../api/articles"
-
+import { articles } from "../api/articles";
 
 function Article(props) {
   const [article, setArticle] = useState("");
@@ -19,7 +18,7 @@ function Article(props) {
 
   function toHTML(text) {
     let textHTML = marked.parse(text);
-    textHTML = DOMPurify.sanitize(textHTML);  // very important for security!
+    textHTML = DOMPurify.sanitize(textHTML); // very important for security!
     return textHTML;
   }
 
@@ -33,11 +32,7 @@ function Article(props) {
     document.title = getTitle(article);
   }, [article, articleID]);
 
-  return (
-    <div dangerouslySetInnerHTML={{__html: toHTML(article)}}>
-    </div>
-  );
+  return <div dangerouslySetInnerHTML={{ __html: toHTML(article) }}></div>;
 }
-
 
 export { Article };

@@ -5,7 +5,6 @@ import { Article } from "../pages/Article";
 
 import { articles } from "../api/articles";
 
-
 function Editor() {
   const [editorText, setEditorText] = useState(null);
   const { articleID } = useParams();
@@ -33,20 +32,19 @@ function Editor() {
     <div>
       <textarea
         className="editor"
-        value={editorText === null? "": editorText}
+        value={editorText === null ? "" : editorText}
         onChange={handleEditorText}
-      >
-      </textarea><br/>
+      ></textarea>
+      <br />
       <div className="editor-button">
         <button onClick={handleCancel}>Cancel</button>
         <button onClick={handleSave}>Save</button>
       </div>
       <div className="editor-preview">
-        <Article key={editorText} text={editorText}/>
+        <Article key={editorText} text={editorText} />
       </div>
     </div>
   );
 }
-
 
 export { Editor };

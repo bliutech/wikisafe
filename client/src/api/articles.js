@@ -1,6 +1,5 @@
 function articles(name) {
-  switch(name) {
-
+  switch (name) {
     case "ucla":
       return `
 # University of California, Los Angeles
@@ -47,8 +46,7 @@ The Massachusetts Institute of Technology (MIT) is a private land-grant research
 
 MIT's 166-acre (67.2 ha) campus in the city of Cambridge spans approximately a mile along the north side of the Charles River basin. The campus is divided roughly in half by Massachusetts Avenue, with most dormitories and student life facilities to the west and most academic buildings to the east. The bridge closest to MIT is the Harvard Bridge, which is known for being marked off in a non-standard unit of length &ndash; the smoot.
       `;
-    }
+  }
 }
-
 
 export { articles };
