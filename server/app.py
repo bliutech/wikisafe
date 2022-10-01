@@ -2,6 +2,8 @@ from flask import Flask, request, Response
 from flask_sqlalchemy import SQLAlchemy
 import sys
 import requests
+import datetime
+import os
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///wikisafe.db"
@@ -66,9 +68,92 @@ def get_all_users():
     print(User.query.all(), file=sys.stderr)
     return ""
 
+# filesystem
+class File(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    article_id = db.Column(db.String, unique=True, nullable=False)
+    file_name = db.Column(db.String, unique=True, nullable=False)
+    author = db.Column(db.String, unique=False, nullable=False)
+    last_editor = db.Column(db.String, unique=False, nullable=True)
+    date_created = db.Column(db.BIGINT, unique=False, nullable=False)
+    date_modified = db.Column(db.BIGINT, unique=False, nullable=True)
+    
+    def __repr__(self):
+        return "<File %r>" % self.file_name
 
-# core feature endpoints
-@app.route("/summarize", methods=["POST"])
+@app.route("/article", methods=['GET','POST','PUT','DELETE'])
+def article():
+  a_id = request.form.get('article_id')
+  f = File.query.filter_by(article_id=a_id).first()
+
+  # creating article
+  if request.method == 'POST':
+    if f:
+      return "file already exists", 401
+
+    new_text = request.form.get('new_text')
+    user = request.form.get('user')
+    date = request.form.get('date')
+
+    if not a_id or not user or not date:
+      return "bad parameters", 400
+    
+    f = File(
+      article_id=a_id,
+      file_name=f"{a_id}.md",
+      author=user,
+      date_created=date
+    )
+    
+    with open(f"{os.getcwd()}/articles/{a_id}.md", 'w') as w:
+      w.write(new_text)
+
+    db.session.add(f)
+    db.session.commit()
+    return "success", 200
+
+  if not f:
+    return "file not found", 404
+
+  # getting article
+  if request.method == 'GET':
+    with open("articles/" + f.file_name, 'r') as w:
+      return w.read(), 200
+
+  # updating article
+  elif request.method == 'PUT':
+    new_text = request.form.get('new_text')
+    user = request.form.get('user')
+    date = request.form.get('date')
+
+    if not a_id or not user or not date:
+      return "bad parameters", 400
+    
+    with open(f"{os.getcwd()}/articles/{a_id}.md", 'w') as w:
+      w.write(new_text)
+
+    f.date_modified = date
+    f.last_editor = user
+
+    db.session.commit()
+
+    return "success", 200
+
+  # deleting article
+  elif request.method == 'DELETE':
+    # delete file
+    os.remove(f"{os.getcwd()}/articles/{a_id}.md")
+
+    # delete db entry
+    db.session.delete(f)
+    db.session.commit()
+
+    return "success", 200
+
+  return "wtf you shouldn't be here", 500
+
+# text summarizer
+@app.route("/summarize", methods=['POST'])
 def summarize():
     text = request.form.get("text")
     resp = requests.post(
