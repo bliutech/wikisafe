@@ -6,7 +6,6 @@ import DOMPurify from "dompurify";
 
 import { articles } from "../api/articles";
 
-
 function Article(props) {
   const [article, setArticle] = useState("");
   const { articleID } = useParams();
@@ -15,7 +14,7 @@ function Article(props) {
     let start = text.indexOf("#") + 1;
     let end = text.indexOf("\n\n", start);
     if (start == 0) {
-      return "Unnamed Article"
+      return "Unnamed Article";
     } else {
       return text.slice(start, end);
     }

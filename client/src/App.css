@@ -153,13 +153,13 @@ td {
 .navigation-account {
   position: fixed;
   bottom: 0;
-  margin: 0 0 calc(2.0 * var(--scale)) 0;
+  margin: 0 0 calc(2 * var(--scale)) 0;
 }
 
 input {
   background: var(--color-background);
   color: var(--color-text-body);
-  font-size: calc(2.0 * var(--scale));
+  font-size: calc(2 * var(--scale));
   font-family: var(--font-serif);
   border-style: solid;
   border-color: var(--color-text-main);
@@ -237,7 +237,7 @@ button:hover {
 .form-table {
   border: none;
   border-collapse: collapse;
-  margin: 0 0 calc(2.0 * var(--scale)) 0;
+  margin: 0 0 calc(2 * var(--scale)) 0;
 }
 
 .form-table td {
@@ -247,8 +247,9 @@ button:hover {
 
 .form-label {
   align-items: left;
-  margin: calc(0.5 * var(--scale)) calc(1.5 * var(--scale)) calc(0.5 * var(--scale)) 0;
-  white-space: nowrap;  /* prevent multi-line cell */
+  margin: calc(0.5 * var(--scale)) calc(1.5 * var(--scale))
+    calc(0.5 * var(--scale)) 0;
+  white-space: nowrap; /* prevent multi-line cell */
 }
 
 .form-input {
@@ -271,5 +272,5 @@ button:hover {
 }
 
 .form-button button {
-  width: calc(10.0 * var(--scale));
+  width: calc(10 * var(--scale));
 }

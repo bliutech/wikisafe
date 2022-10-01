@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import { Form } from "../components/Form";
 
-
 function SignUp() {
   const [username, setUsername] = useState(null);
   const [password, setPassword] = useState(null);
@@ -12,16 +11,16 @@ function SignUp() {
       label: "Username",
       placeholder: "Create a unique username for signing in.",
       onChange: setUsername,
-      onKeyPress: handleEnter
+      onKeyPress: handleEnter,
     },
     {
       label: "Password",
       type: "password",
       placeholder: "Create an un-simple password for signing in.",
       onChange: setPassword,
-      onKeyPress: handleEnter
+      onKeyPress: handleEnter,
     },
-  ]
+  ];
 
   function handleEnter(key) {
     if (key == "Enter") {
@@ -37,10 +36,13 @@ function SignUp() {
   return (
     <div>
       <h1>Sign Up</h1>
-      <Form formEntries={formEntries} buttonText="Sign Up" onClick={handleSignUp} />
+      <Form
+        formEntries={formEntries}
+        buttonText="Sign Up"
+        onClick={handleSignUp}
+      />
     </div>
   );
 }
-
 
 export { SignUp };

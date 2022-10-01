@@ -68,6 +68,7 @@ def get_all_users():
     print(User.query.all(), file=sys.stderr)
     return ""
 
+
 # filesystem
 class File(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -77,83 +78,82 @@ class File(db.Model):
     last_editor = db.Column(db.String, unique=False, nullable=True)
     date_created = db.Column(db.BIGINT, unique=False, nullable=False)
     date_modified = db.Column(db.BIGINT, unique=False, nullable=True)
-    
+
     def __repr__(self):
         return "<File %r>" % self.file_name
 
-@app.route("/article", methods=['GET','POST','PUT','DELETE'])
+
+@app.route("/article", methods=["GET", "POST", "PUT", "DELETE"])
 def article():
-  a_id = request.form.get('article_id')
-  f = File.query.filter_by(article_id=a_id).first()
+    a_id = request.form.get("article_id")
+    f = File.query.filter_by(article_id=a_id).first()
 
-  # creating article
-  if request.method == 'POST':
-    if f:
-      return "file already exists", 401
+    # creating article
+    if request.method == "POST":
+        if f:
+            return "file already exists", 401
 
-    new_text = request.form.get('new_text')
-    user = request.form.get('user')
-    date = request.form.get('date')
+        new_text = request.form.get("new_text")
+        user = request.form.get("user")
+        date = request.form.get("date")
 
-    if not a_id or not user or not date:
-      return "bad parameters", 400
-    
-    f = File(
-      article_id=a_id,
-      file_name=f"{a_id}.md",
-      author=user,
-      date_created=date
-    )
-    
-    with open(f"{os.getcwd()}/articles/{a_id}.md", 'w') as w:
-      w.write(new_text)
+        if not a_id or not user or not date:
+            return "bad parameters", 400
 
-    db.session.add(f)
-    db.session.commit()
-    return "success", 200
+        f = File(
+            article_id=a_id, file_name=f"{a_id}.md", author=user, date_created=date
+        )
 
-  if not f:
-    return "file not found", 404
+        with open(f"{os.getcwd()}/articles/{a_id}.md", "w") as w:
+            w.write(new_text)
 
-  # getting article
-  if request.method == 'GET':
-    with open("articles/" + f.file_name, 'r') as w:
-      return w.read(), 200
+        db.session.add(f)
+        db.session.commit()
+        return "success", 200
 
-  # updating article
-  elif request.method == 'PUT':
-    new_text = request.form.get('new_text')
-    user = request.form.get('user')
-    date = request.form.get('date')
+    if not f:
+        return "file not found", 404
 
-    if not a_id or not user or not date:
-      return "bad parameters", 400
-    
-    with open(f"{os.getcwd()}/articles/{a_id}.md", 'w') as w:
-      w.write(new_text)
+    # getting article
+    if request.method == "GET":
+        with open("articles/" + f.file_name, "r") as w:
+            return w.read(), 200
 
-    f.date_modified = date
-    f.last_editor = user
+    # updating article
+    elif request.method == "PUT":
+        new_text = request.form.get("new_text")
+        user = request.form.get("user")
+        date = request.form.get("date")
 
-    db.session.commit()
+        if not a_id or not user or not date:
+            return "bad parameters", 400
 
-    return "success", 200
+        with open(f"{os.getcwd()}/articles/{a_id}.md", "w") as w:
+            w.write(new_text)
 
-  # deleting article
-  elif request.method == 'DELETE':
-    # delete file
-    os.remove(f"{os.getcwd()}/articles/{a_id}.md")
+        f.date_modified = date
+        f.last_editor = user
 
-    # delete db entry
-    db.session.delete(f)
-    db.session.commit()
+        db.session.commit()
 
-    return "success", 200
+        return "success", 200
 
-  return "wtf you shouldn't be here", 500
+    # deleting article
+    elif request.method == "DELETE":
+        # delete file
+        os.remove(f"{os.getcwd()}/articles/{a_id}.md")
+
+        # delete db entry
+        db.session.delete(f)
+        db.session.commit()
+
+        return "success", 200
+
+    return "wtf you shouldn't be here", 500
+
 
 # text summarizer
-@app.route("/summarize", methods=['POST'])
+@app.route("/summarize", methods=["POST"])
 def summarize():
     text = request.form.get("text")
     resp = requests.post(

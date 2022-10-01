@@ -5,7 +5,6 @@ import { Article } from "../pages/Article";
 
 import { articles } from "../api/articles";
 
-
 function Editor() {
   const [editorText, setEditorText] = useState(null);
   const { articleID } = useParams();
