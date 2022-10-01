@@ -14,7 +14,7 @@ function Home() {
           Team <b>Peanut Butter & Jelly Jsandwich</b>&mdash;Prateik, Benson, Jeffrey, and Jordan.
         </p>
 
-        <p>Here is a link to the <Link to="/article">test article</Link>.</p>
+        <p>Here is a link to the <Link to="/a/ucla">test article</Link>.</p>
       </div>
     );
 }

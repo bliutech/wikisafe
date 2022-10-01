@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Vollkorn:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
-
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;300;400;500;600;700;800;900&display=swap');
 
 :root {
   /* sizes */
@@ -11,17 +11,18 @@
 
   /* colors */
   --color-background: #ffffff;
-  --color-background-accent: #dddddd;
-  --color-background-emph: #bbbbbb;
+  --color-background-accent: #eeeeee;
+  --color-background-emph: #cccccc;
   --color-text-main: #000000;
   --color-text-body: #222222;
   --color-text-sub: #666666;
   --color-text-link: #1166cc;
+  --color-text-link-emph: #aa6633;
 
   /* font */
   --font-sans-serif: "IBM Plex Sans", "Arial", sans-serif;
   --font-serif: "Vollkorn", serif;
-  --font-mono: "JetBrains Mono", monospace;
+  --font-mono: "Inconsolata", monospace;
 }
 
 body {
@@ -74,6 +75,14 @@ a {
   text-decoration: none;
 }
 
+a:hover {
+  color: var(--color-text-link-emph);
+}
+
+code {
+  font-family: var(--font-mono);
+}
+
 sup {
   vertical-align: top;
 }
@@ -84,6 +93,12 @@ sub {
 
 img {
   width: var(--page-width);
+}
+
+.logo {
+  width: calc(var(--bar-ratio) * var(--scale));
+  transform: scale(0.8, 0.8);
+  border-radius: calc(0.5 * var(--bar-ratio) * var(--scale));
 }
 
 figcaption {
@@ -115,7 +130,8 @@ table, th, td {
 
 .navigation-bar ul {
   list-style: none;
-  padding: calc(2.0 * var(--scale)) 0 0 calc(2.0 * var(--scale));
+  margin: calc(1.5 * var(--scale)) 0 0 0;
+  padding: 0 0 0 calc(2.0 * var(--scale));
 }
 
 .navigation-bar li {
@@ -125,4 +141,72 @@ table, th, td {
 .navigation-bar li a {
   color: var(--color-text-body);
   text-decoration: none;
+}
+
+.navigation-bar li a:hover {
+  color: var(--color-text-link-emph);
+}
+
+textarea {
+  background: var(--color-background);
+  color: var(--color-text-body);
+  font-size: calc(2.0 * var(--scale));
+  font-family: var(--font-serif);
+  border-style: solid;
+  border-color: var(--color-text-main);
+  border-width: calc(0.15 * var(--scale));
+  border-radius: calc(1.0 * var(--scale));
+  padding: calc(0.5 * var(--scale))
+           calc(1.0 * var(--scale))
+           calc(0.5 * var(--scale))
+           calc(1.0 * var(--scale));
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--color-text-main);
+}
+
+.editor {
+  font-family: var(--font-mono);
+  width: var(--page-width);
+  box-sizing: border-box;
+  height: calc(0.375 * 100vh);
+}
+
+button {
+  background: var(--color-background);
+  color: var(--color-text-body);
+  font-size: calc(2.0 * var(--scale));
+  font-family: var(--font-serif);
+  border-style: solid;
+  border-color: var(--main-text);
+  border-width: calc(0.15 * var(--scale));
+  border-radius: calc(1.0 * var(--scale));
+  padding: calc(0.25 * var(--scale))
+           calc(0.75 * var(--scale))
+           calc(0.0 * var(--scale))
+           calc(0.75 * var(--scale));
+}
+
+button:hover {
+  background: var(--color-background-accent);
+}
+
+.editor-button {
+  width: var(--page-width);
+  text-align: right;
+  margin: calc(2.0 * var(--scale)) 0 0 0;
+  padding: 0 0 0 0;
+}
+
+.editor-button button {
+  width: calc(10.0 * var(--scale));
+  margin: 0 0 0 calc(2.0 * var(--scale));
+}
+
+.editor-preview {
+  height: calc(0.4 * 100vh);
+  overflow: scroll;
+  margin: calc(2.0 * var(--scale)) 0 0 0;
 }

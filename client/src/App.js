@@ -4,6 +4,7 @@ import './App.css';
 
 import { Home } from "./pages/Home";
 import { Article } from "./pages/Article"
+import { Edit } from "./pages/Edit"
 
 import { NavigationBar } from "./components/NavigationBar"
 
@@ -20,6 +21,7 @@ function App() {
               <Routes>
                 <Route path="/" element={ <Home /> }/>
                 <Route path="/a/:articleID" element={ <Article /> }/>
+                <Route path="/e/:articleID" element={ <Edit /> }/>
               </Routes>
             </div>
           </div>

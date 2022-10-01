@@ -4,38 +4,37 @@ import { useParams } from "react-router-dom";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 
-import { articles } from "../articles/articles"
+import { articles } from "../api/articles"
 
 
-function Article() {
+function Article(props) {
   const [article, setArticle] = useState("");
   const { articleID } = useParams();
 
   function getTitle(text) {
-    function getStart(text) {
-      let start = text.indexOf("<h1");
-      for (let i = start + 3; i < text.length; ++i) {
-        if (text[i] == ">") {
-          return i;
-        }
-      }
-    }
-    let start = getStart(text) + 1;
-    let end = text.indexOf("</h1>", start);
+    let start = text.indexOf("#") + 1;
+    let end = text.indexOf("\n\n", start);
     return text.slice(start, end);
   }
 
-  useEffect(() => {
-    let articlePlain = articles(articleID)
-    let articleHTML = marked.parse(articlePlain)
-    articleHTML = DOMPurify.sanitize(articleHTML)
+  function toHTML(text) {
+    let textHTML = marked.parse(text);
+    textHTML = DOMPurify.sanitize(textHTML);  // very important for security!
+    return textHTML;
+  }
 
-    setArticle(articleHTML);
+  useEffect(() => {
+    if (props.text) {
+      setArticle(props.text);
+    } else {
+      let articlePlain = articles(articleID);
+      setArticle(articlePlain);
+    }
     document.title = getTitle(article);
   }, [article, articleID]);
 
   return (
-    <div dangerouslySetInnerHTML={{__html: article}}>
+    <div dangerouslySetInnerHTML={{__html: toHTML(article)}}>
     </div>
   );
 }
