@@ -3,24 +3,28 @@ from flask_sqlalchemy import SQLAlchemy
 import sys
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///wikisafe.db'
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///wikisafe.db"
 db = SQLAlchemy(app)
 
-@app.route('/')
+
+@app.route("/")
 def test():
-  return "hello world"
+    return "hello world"
 
-@app.route('/create_user/<usr>')
+
+@app.route("/create_user/<usr>")
 def create_user(usr):
-  user = User(username=usr, email=f'{usr}@example.com')
-  db.session.add(user)
-  db.session.commit()
-  return f"user {usr} created!"
+    user = User(username=usr, email=f"{usr}@example.com")
+    db.session.add(user)
+    db.session.commit()
+    return f"user {usr} created!"
 
-@app.route('/get_user/<usr>')
+
+@app.route("/get_user/<usr>")
 def get_user(usr):
-  print(User.query.filter_by(username=usr), file=sys.stderr)
-  return f"user {usr} found"
+    print(User.query.filter_by(username=usr), file=sys.stderr)
+    return f"user {usr} found"
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,7 +32,8 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return "<User %r>" % self.username
 
-if __name__ == '__main__':
-  app.run()
+
+if __name__ == "__main__":
+    app.run()
