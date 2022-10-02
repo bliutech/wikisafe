@@ -12,6 +12,7 @@ function StableDiffusion() {
     "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
   );
   const [caption, setCaption] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const formEntries = [
     {
@@ -29,7 +30,9 @@ function StableDiffusion() {
   }
 
   async function handleCaption() {
+    setLoading(true);
     const imageURLRaw = await getImage(caption);
+    setLoading(false);
     setImageURL(imageURLRaw);
   }
 
@@ -58,7 +61,7 @@ function StableDiffusion() {
       {displayURL()}
       <Form
         formEntries={formEntries}
-        buttonText="Generate"
+        buttonText={loading ? "loading..." : "Generate"}
         onClick={handleCaption}
       />
     </div>

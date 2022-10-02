@@ -20,6 +20,8 @@ function Editor() {
   const [editorText, setEditorText] = useState(null);
   const { articleID } = useParams();
 
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   function handleEditorText(event) {
@@ -46,7 +48,9 @@ function Editor() {
   }
 
   async function handleCaption() {
+    setLoading(true);
     const text = await getCaption(editorText);
+    setLoading(false);
     setEditorText(text);
   }
 
@@ -61,7 +65,7 @@ function Editor() {
       <div className="editor-button">
         <div>
           <button className="editor-caption" onClick={handleCaption}>
-            Generate Captions
+            {loading ? "loading..." : "Generate Captions"}
           </button>
         </div>
         <div>
