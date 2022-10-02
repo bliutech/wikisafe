@@ -90,4 +90,20 @@ async function deleteArticle(articleID, callback = () => {}) {
   }
 }
 
-export { createArticle, getArticle, changeArticle, deleteArticle };
+async function getArticles() {
+  const res = await fetch(`${base}/articles`, {
+    method: "GET",
+  });
+
+  if (!res.ok) {
+    // server connection error
+    const message = `An error has occurred: ${res.statusText}`;
+    window.alert(message);
+    return;
+  }
+
+  const json = await res.json();
+  return json["articles"];
+}
+
+export { createArticle, getArticle, changeArticle, deleteArticle, getArticles };
