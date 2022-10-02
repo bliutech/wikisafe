@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0;
+pragma solidity ^0.5.16;
 
 contract Edits{
     uint editCount = 0;
@@ -13,6 +13,8 @@ contract Edits{
 
     mapping(uint => Edit) public edits;
 
-    constructor() {}
+    constructor() public {
+
+    }
 
 }

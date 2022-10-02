@@ -10,7 +10,6 @@
   "author": "bliutech",
   "license": "ISC",
   "dependencies": {
-    "lite-server": "^2.6.1",
     "truffle": "^5.5.32",
     "truffle-contract": "^4.0.31"
   }
