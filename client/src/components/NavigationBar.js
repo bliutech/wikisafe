@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
+import logo from "../logo.jpg";
+
 function NavigationBar() {
   const [cookies, setCookie, removeCookie] = useCookies(["username"]);
   const username = cookies.username;
@@ -36,18 +38,21 @@ function NavigationBar() {
   if (username) {
     return (
       <header className="navigation-bar">
-        <img src="logo.jpg" className="logo" />
+        <img src={logo} className="logo" />
         <div>
           <ul>
             <li onClick={() => onClick("/")}>Home</li>
             <li onClick={() => onClick("/a/ucla")}>Articles</li>
             {editOrNew()}
+            <li onClick={() => onClick("/stablediffusion")}>
+              Can't Find an Image?
+            </li>
             <li onClick={() => onClick("/about")}>About</li>
           </ul>
         </div>
         <div className="navigation-account">
           <ul>
-            <li>
+            <li className="username">
               <b>{username}</b>
             </li>
             <li onClick={handleSignOut}>Sign Out</li>
@@ -58,11 +63,14 @@ function NavigationBar() {
   } else {
     return (
       <header className="navigation-bar">
-        <img src="logo.jpg" className="logo" />
+        <img src={logo} className="logo" />
         <div>
           <ul>
             <li onClick={() => onClick("/")}>Home</li>
             <li onClick={() => onClick("/a/ucla")}>Articles</li>
+            <li onClick={() => onClick("/stablediffusion")}>
+              Can't Find an Image?
+            </li>
             <li onClick={() => onClick("/about")}>About</li>
           </ul>
         </div>

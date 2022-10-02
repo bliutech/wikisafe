@@ -11,6 +11,8 @@ import {
   deleteArticle,
 } from "../api/articles";
 
+import { getCaption } from "../api/ml";
+
 function Editor() {
   const [cookies, setCookie, removeCookie] = useCookies(["username"]);
   const username = cookies.username;
@@ -35,12 +37,17 @@ function Editor() {
   }, [editorText, articleID]);
 
   function handleCancel() {
-    return;
+    window.location.reload();
   }
 
   async function handleSave() {
     let callback = () => window.location.reload();
     changeArticle(articleID, editorText, username, (callback = callback));
+  }
+
+  async function handleCaption() {
+    const text = await getCaption(editorText);
+    setEditorText(text);
   }
 
   return (
@@ -52,8 +59,15 @@ function Editor() {
       ></textarea>
       <br />
       <div className="editor-button">
-        <button onClick={handleCancel}>Cancel</button>
-        <button onClick={handleSave}>Save</button>
+        <div>
+          <button className="editor-caption" onClick={{}}>
+            Generate Captions
+          </button>
+        </div>
+        <div>
+          <button onClick={handleCancel}>Cancel</button>
+          <button onClick={handleSave}>Save</button>
+        </div>
       </div>
       <div className="editor-preview">
         <Article text={editorText} />

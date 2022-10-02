@@ -1,6 +1,8 @@
+from regex import R
 from flask import Flask, request, Response
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+import replicate
 import sys
 import requests
 import datetime
@@ -89,94 +91,90 @@ class File(db.Model):
 
 @app.route("/article", methods=["GET", "POST", "PUT", "DELETE"])
 def article():
-  BASE_DIR = os.getcwd() + "/articles"
+    BASE_DIR = os.getcwd() + "/articles"
 
+    if request.method == "GET":
+        print(request.args, file=sys.stderr)
+        a_id = request.args.get("article_id")
 
-  if request.method == "GET":
-    print(request.args, file=sys.stderr)
-    a_id = request.args.get('article_id')
+        # check if file exists
+        if not File.query.filter_by(article_id=a_id).first():
+            return "file not found", 404
 
-    # check if file exists
-    if not File.query.filter_by(article_id=a_id).first():
-      return "file not found", 404
+        # if it does, read the file contents
+        with open(f"{BASE_DIR}/{a_id}.md", "r") as w:
+            response = w.read()
+            return json.dumps({"response": response}), 200
 
-    # if it does, read the file contents
-    with open(f"{BASE_DIR}/{a_id}.md", "r") as w:
-        response = w.read()
-        return json.dumps({"response": response}), 200
+    elif request.method == "POST":
+        print(request.json, file=sys.stderr)
 
+        # parse params
+        request_dict = request.json
+        try:
+            a_id = request_dict["article_id"]
+            new_text = request_dict["new_text"]
+            user = request_dict["user"]
+            date = request_dict["date"]
+        except:
+            return "bad parameters", 400
 
-  elif request.method == "POST":
-    print(request.json, file=sys.stderr)
+        # create file
+        newFile = File(
+            article_id=a_id, file_name=f"{a_id}.md", author=user, date_created=date
+        )
+        with open(f"{BASE_DIR}/{a_id}.md", "w") as w:
+            w.write(new_text)
 
-    # parse params
-    request_dict = request.json
-    try:
-      a_id = request_dict["article_id"]
-      new_text = request_dict["new_text"]
-      user = request_dict["user"]
-      date = request_dict["date"]
-    except:
-      return "bad parameters", 400
+        # add file record to db
+        db.session.add(newFile)
+        db.session.commit()
 
-    # create file
-    newFile = File(
-        article_id=a_id, file_name=f"{a_id}.md", author=user, date_created=date
-    )
-    with open(f"{BASE_DIR}/{a_id}.md", "w") as w:
-        w.write(new_text)
+    elif request.method == "PUT":
+        request_dict = request.json
+        try:
+            a_id = request_dict["article_id"]
+            new_text = request_dict["new_text"]
+            user = request_dict["user"]
+            date = request_dict["date"]
+        except:
+            return "bad parameters", 400
 
-    # add file record to db
-    db.session.add(newFile)
-    db.session.commit()
+        fileRecord = File.query.filter_by(article_id=a_id).first()
+        if not fileRecord:
+            return "file not found", 404
 
+        # overwrite file contents
+        with open(f"{BASE_DIR}/{a_id}.md", "w") as w:
+            w.write(new_text)
 
-  elif request.method == "PUT":
-    request_dict = request.json
-    try:
-        a_id = request_dict["article_id"]
-        new_text = request_dict["new_text"]
-        user = request_dict["user"]
-        date = request_dict["date"]
-    except:
-      return "bad parameters", 400
+        # update file record
+        fileRecord.date_modified = date
+        fileRecord.last_editor = user
+        db.session.commit()
 
-    fileRecord = File.query.filter_by(article_id=a_id).first()
-    if not fileRecord:
-      return "file not found", 404
+    elif request.method == "DELETE":
+        print(request.json, file=sys.stderr)
 
-    # overwrite file contents
-    with open(f"{BASE_DIR}/{a_id}.md", "w") as w:
-      w.write(new_text)
+        fileRecord = File.query.filter_by(article_id=a_id).first()
+        if not fileRecord:
+            return "file not found", 404
 
-    # update file record
-    fileRecord.date_modified = date
-    fileRecord.last_editor = user
-    db.session.commit()
+        # delete file
+        os.remove(f"{BASE_DIR}/{a_id}.md")
 
+        # delete db entry
+        db.session.delete(f)
+        db.session.commit()
 
-  elif request.method == "DELETE":
-    print(request.json, file=sys.stderr)
-
-    fileRecord = File.query.filter_by(article_id=a_id).first()
-    if not fileRecord:
-      return "file not found", 404
-
-    # delete file
-    os.remove(f"{BASE_DIR}/{a_id}.md")
-
-    # delete db entry
-    db.session.delete(f)
-    db.session.commit()
-
-
-  return "success", 200
+    return "success", 200
 
 
 # text summarizer
 @app.route("/summarize", methods=["POST"])
 def summarize():
-    text = request.form.get("text")
+    request_dict = request.json
+    text = request_dict["text"]
     resp = requests.post(
         "https://api.smrzr.io/v1/summarize?num_sentences=3&algorithm=kmeans&min_length=40&max_length=500",
         data=text,
@@ -184,6 +182,18 @@ def summarize():
     summary = resp.json()["summary"]
 
     return summary
+
+
+# stable diffusion (image generation)
+@app.route("/stablediffusion", methods=["POST"])
+def stable_diffusion():
+    request_dict = request.json
+    prompt = request_dict["prompt"]
+    os.environ["REPLICATE_API_TOKEN"] = "6cdf7546f955d96f4db3508022a5f126022fc105"
+    model = replicate.models.get("stability-ai/stable-diffusion")
+    image_url = model.predict(prompt=prompt)
+    print(image_url, file=sys.stderr)
+    return json.dumps({"image_url": image_url}), 200
 
 
 if __name__ == "__main__":

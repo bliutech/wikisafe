@@ -6,6 +6,7 @@ import { Home } from "./pages/Home";
 import { Article } from "./pages/Article";
 import { Edit } from "./pages/Edit";
 import { New } from "./pages/New";
+import { StableDiffusion } from "./pages/StableDiffusion";
 import { SignIn } from "./pages/SignIn";
 import { SignUp } from "./pages/SignUp";
 
@@ -25,9 +26,12 @@ function App() {
                 <Route path="/a/:articleID" element={<Article />} />
                 <Route path="/e/:articleID" element={<Edit />} />
                 <Route path="/new" element={<New />} />
+                <Route path="/stablediffusion" element={<StableDiffusion />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
               </Routes>
+              <br />
+              <br />
             </div>
           </div>
         </BrowserRouter>

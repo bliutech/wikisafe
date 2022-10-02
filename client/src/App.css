@@ -140,12 +140,17 @@ td {
 .navigation-bar li {
   color: var(--color-text-body);
   text-decoration: none;
-  padding: 0 0 calc(1 * var(--scale)) 0;
+  padding: 0 0 calc(1.5 * var(--scale)) 0;
 }
 
 .navigation-bar li:hover {
   color: var(--color-text-link-emph);
   cursor: pointer;
+}
+
+.username:hover {
+  color: var(--color-text-body) !important;
+  cursor: text !important;
 }
 
 .navigation-account {
@@ -215,6 +220,8 @@ button:hover {
 }
 
 .editor-button {
+  display: flex;
+  justify-content: space-between;
   width: var(--page-width);
   text-align: right;
   margin: calc(2 * var(--scale)) 0 0 0;
@@ -226,8 +233,13 @@ button:hover {
   margin: 0 0 0 calc(2 * var(--scale));
 }
 
+.editor-caption {
+  width: calc(20 * var(--scale)) !important;
+  margin: 0 0 0 0 !important;
+}
+
 .editor-preview {
-  height: calc(0.4 * 100vh);
+  height: calc(0.42 * 100vh);
   overflow: scroll;
   margin: calc(2 * var(--scale)) 0 0 0;
 }
@@ -271,4 +283,17 @@ button:hover {
 
 .form-button button {
   width: calc(10 * var(--scale));
+}
+
+.stable-diffusion-image {
+  background: var(--color-background-accent);
+  display: flex;
+  margin: auto;
+  width: calc(50 * var(--scale));
+  height: calc(50 * var(--scale));
+}
+
+.url {
+  font-family: var(--font-mono);
+  font-size: calc(2 * var(--scale));
 }
