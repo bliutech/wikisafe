@@ -1,5 +1,7 @@
 # WikiSafe
 
+<img width="1141" alt="image" src="https://user-images.githubusercontent.com/67720812/193449380-4fcea915-08f8-4121-8951-09c16428f45f.png">
+
 Project for HackMIT 2022, made with &#10084; by Team **PB & J & J**&mdash;Prateik Siahi, Benson Liu, Jeffrey Kwan, and Jordan Lin.
 
 ## Setup
