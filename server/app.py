@@ -9,7 +9,7 @@ import datetime
 import os
 import json
 
-
+# initialized app
 app = Flask(__name__)
 CORS(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///wikisafe.db"
