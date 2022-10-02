@@ -1,6 +1,8 @@
+from regex import R
 from flask import Flask, request, Response
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+import replicate
 import sys
 import requests
 import datetime
@@ -193,7 +195,8 @@ def article():
 # text summarizer
 @app.route("/summarize", methods=["POST"])
 def summarize():
-    text = request.form.get("text")
+    request_dict = request.json
+    text = request_dict["text"]
     resp = requests.post(
         "https://api.smrzr.io/v1/summarize?num_sentences=3&algorithm=kmeans&min_length=40&max_length=500",
         data=text,
@@ -201,6 +204,18 @@ def summarize():
     summary = resp.json()["summary"]
 
     return summary
+
+
+# stable diffusion (image generation)
+@app.route("/stablediffusion", methods=["POST"])
+def stable_diffusion():
+    request_dict = request.json
+    prompt = request_dict["prompt"]
+    os.environ["REPLICATE_API_TOKEN"] = "6cdf7546f955d96f4db3508022a5f126022fc105"
+    model = replicate.models.get("stability-ai/stable-diffusion")
+    image_url = model.predict(prompt=prompt)
+    print(image_url, file=sys.stderr)
+    return json.dumps({"image_url": image_url}), 200
 
 
 @app.post("/caption_image")
