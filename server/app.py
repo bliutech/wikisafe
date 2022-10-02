@@ -1,11 +1,15 @@
 from flask import Flask, request, Response
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 import sys
 import requests
 import datetime
 import os
+import json
+
 
 app = Flask(__name__)
+CORS(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///wikisafe.db"
 db = SQLAlchemy(app)
 
@@ -27,33 +31,33 @@ class User(db.Model):
 
 @app.post("/register")
 def register():
-    usr = request.form.get("usr")
-    pwd = request.form.get("pwd")
+    obj = request.json
+    usr = obj["usr"]
+    pwd = obj["pwd"]
+
+    res = {"username": None, "password": None}
 
     # error handling
-    if len(pwd) <= 0:
-        return "bad password", 400
-    if User.query.filter_by(username=usr):
-        return "account already exists", 401
+    if not User.query.filter_by(username=usr).first():
+        res["username"] = usr
+        res["password"] = pwd
+        # create user in db
+        user = User(username=usr, password=pwd)
+        db.session.add(user)
+        db.session.commit()
 
-    # create user in db
-    user = User(username=usr, password=pwd)
-    db.session.add(user)
-    db.session.commit()
-
-    return "success", 200
+    return res
 
 
 @app.post("/login")
 def login():
-    usr = request.form.get("usr")
-    pwd = request.form.get("pwd")
-    # error handling
-    # print(User.query.filter_by(username=usr).filter_by(password=pwd).first(), file=sys.stderr)
-    if not User.query.filter_by(username=usr).filter_by(password=pwd).first():
-        return "invalid credentials", 400
-    else:
-        return "success", 200
+    obj = request.json
+    usr = obj["usr"]
+
+    u = User.query.filter_by(username=usr).first()
+    pwd = u.password if u else None
+    res = {"username": usr, "password": pwd}
+    return json.dumps(res)
 
 
 # test functions; can remove in prod
@@ -85,71 +89,83 @@ class File(db.Model):
 
 @app.route("/article", methods=["GET", "POST", "PUT", "DELETE"])
 def article():
-    a_id = request.form.get("article_id")
-    f = File.query.filter_by(article_id=a_id).first()
+    BASE_DIR = os.getcwd() + "/articles"
 
-    # creating article
-    if request.method == "POST":
-        if f:
-            return "file already exists", 401
+    if request.method == "GET":
+        print(request.args, file=sys.stderr)
+        a_id = request.args.get("article_id")
 
-        new_text = request.form.get("new_text")
-        user = request.form.get("user")
-        date = request.form.get("date")
+        # check if file exists
+        if not File.query.filter_by(article_id=a_id).first():
+            return "file not found", 404
 
-        if not a_id or not user or not date:
+        # if it does, read the file contents
+        with open(f"{BASE_DIR}/{a_id}.md", "r") as w:
+            response = w.read()
+            return json.dumps({"response": response}), 200
+
+    elif request.method == "POST":
+        print(request.json, file=sys.stderr)
+
+        # parse params
+        request_dict = request.json
+        try:
+            a_id = request_dict["article_id"]
+            new_text = request_dict["new_text"]
+            user = request_dict["user"]
+            date = request_dict["date"]
+        except:
             return "bad parameters", 400
 
-        f = File(
+        # create file
+        newFile = File(
             article_id=a_id, file_name=f"{a_id}.md", author=user, date_created=date
         )
-
-        with open(f"{os.getcwd()}/articles/{a_id}.md", "w") as w:
+        with open(f"{BASE_DIR}/{a_id}.md", "w") as w:
             w.write(new_text)
 
-        db.session.add(f)
+        # add file record to db
+        db.session.add(newFile)
         db.session.commit()
-        return "success", 200
 
-    if not f:
-        return "file not found", 404
-
-    # getting article
-    if request.method == "GET":
-        with open("articles/" + f.file_name, "r") as w:
-            return w.read(), 200
-
-    # updating article
     elif request.method == "PUT":
-        new_text = request.form.get("new_text")
-        user = request.form.get("user")
-        date = request.form.get("date")
-
-        if not a_id or not user or not date:
+        request_dict = request.json
+        try:
+            a_id = request_dict["article_id"]
+            new_text = request_dict["new_text"]
+            user = request_dict["user"]
+            date = request_dict["date"]
+        except:
             return "bad parameters", 400
 
-        with open(f"{os.getcwd()}/articles/{a_id}.md", "w") as w:
+        fileRecord = File.query.filter_by(article_id=a_id).first()
+        if not fileRecord:
+            return "file not found", 404
+
+        # overwrite file contents
+        with open(f"{BASE_DIR}/{a_id}.md", "w") as w:
             w.write(new_text)
 
-        f.date_modified = date
-        f.last_editor = user
-
+        # update file record
+        fileRecord.date_modified = date
+        fileRecord.last_editor = user
         db.session.commit()
 
-        return "success", 200
-
-    # deleting article
     elif request.method == "DELETE":
+        print(request.json, file=sys.stderr)
+
+        fileRecord = File.query.filter_by(article_id=a_id).first()
+        if not fileRecord:
+            return "file not found", 404
+
         # delete file
-        os.remove(f"{os.getcwd()}/articles/{a_id}.md")
+        os.remove(f"{BASE_DIR}/{a_id}.md")
 
         # delete db entry
         db.session.delete(f)
         db.session.commit()
 
-        return "success", 200
-
-    return "wtf you shouldn't be here", 500
+    return "success", 200
 
 
 # text summarizer

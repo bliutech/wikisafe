@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 
-import { articles } from "../api/articles";
+import {
+  createArticle,
+  getArticle,
+  changeArticle,
+  deleteArticle,
+} from "../api/articles";
 
 function Article(props) {
   const [article, setArticle] = useState("");
@@ -27,14 +33,18 @@ function Article(props) {
   }
 
   useEffect(() => {
-    if (props.text) {
-      setArticle(props.text);
-    } else {
-      let articlePlain = articles(articleID);
-      setArticle(articlePlain);
+    async function handleArticle() {
+      if (props.text) {
+        setArticle(props.text);
+      } else {
+        const articlePlain = await getArticle(articleID);
+        console.log(articlePlain);
+        setArticle(articlePlain);
+      }
     }
+    handleArticle();
     document.title = getTitle(article);
-  }, [article, props.text, articleID]);
+  }, [props.text, articleID]);
 
   return <div dangerouslySetInnerHTML={{ __html: toHTML(article) }}></div>;
 }
