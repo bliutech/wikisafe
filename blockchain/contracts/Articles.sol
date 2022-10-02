@@ -12,7 +12,6 @@ contract Articles {
     }
 
     mapping(uint => Article) public articles;
-    // Article[] public articles;
 
     event ArticleCreated(
         uint id,
