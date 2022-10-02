@@ -65,7 +65,9 @@ function Article(props) {
         Did not want to read all that? Check out the summary by clicking the
         button below :)
       </figcaption>
-      <button onClick={handleSummary}>{loading ? "loading..." : "Summary"}</button>
+      <button onClick={handleSummary}>
+        {loading ? "loading..." : "Summary"}
+      </button>
       <div dangerouslySetInnerHTML={{ __html: toHTML(summary) }}></div>
     </div>
   );
