@@ -86,91 +86,108 @@ class File(db.Model):
     def __repr__(self):
         return "<File %r>" % self.file_name
 
+    def json(self):
+        return {
+            "id": self.id,
+            "articleId": self.article_id,
+            "fileName": self.file_name,
+            "author": self.author,
+            "last_editor": self.last_editor,
+            "date_created": self.date_created,
+            "date_modified": self.date_modified,
+        }
+
+
+@app.route("/articles", methods=["GET"])
+def articles():
+    json = {}
+    if File.query.all() is None:
+        return json, 404
+    json["articles"] = []
+    for file in File.query.all():
+        json["articles"].append(file.json())
+    return json, 200
+
 
 @app.route("/article", methods=["GET", "POST", "PUT", "DELETE"])
 def article():
-  BASE_DIR = os.getcwd() + "/articles"
+    BASE_DIR = os.getcwd() + "/articles"
 
+    if request.method == "GET":
+        print(request.args, file=sys.stderr)
+        a_id = request.args.get("article_id")
 
-  if request.method == "GET":
-    print(request.args, file=sys.stderr)
-    a_id = request.args.get('article_id')
+        # check if file exists
+        if not File.query.filter_by(article_id=a_id).first():
+            return "file not found", 404
 
-    # check if file exists
-    if not File.query.filter_by(article_id=a_id).first():
-      return "file not found", 404
+        # if it does, read the file contents
+        with open(f"{BASE_DIR}/{a_id}.md", "r") as w:
+            response = w.read()
+            return json.dumps({"response": response}), 200
 
-    # if it does, read the file contents
-    with open(f"{BASE_DIR}/{a_id}.md", "r") as w:
-        response = w.read()
-        return json.dumps({"response": response}), 200
+    elif request.method == "POST":
+        print(request.json, file=sys.stderr)
 
+        # parse params
+        request_dict = request.json
+        try:
+            a_id = request_dict["article_id"]
+            new_text = request_dict["new_text"]
+            user = request_dict["user"]
+            date = request_dict["date"]
+        except:
+            return "bad parameters", 400
 
-  elif request.method == "POST":
-    print(request.json, file=sys.stderr)
+        # create file
+        newFile = File(
+            article_id=a_id, file_name=f"{a_id}.md", author=user, date_created=date
+        )
+        with open(f"{BASE_DIR}/{a_id}.md", "w") as w:
+            w.write(new_text)
 
-    # parse params
-    request_dict = request.json
-    try:
-      a_id = request_dict["article_id"]
-      new_text = request_dict["new_text"]
-      user = request_dict["user"]
-      date = request_dict["date"]
-    except:
-      return "bad parameters", 400
+        # add file record to db
+        db.session.add(newFile)
+        db.session.commit()
 
-    # create file
-    newFile = File(
-        article_id=a_id, file_name=f"{a_id}.md", author=user, date_created=date
-    )
-    with open(f"{BASE_DIR}/{a_id}.md", "w") as w:
-        w.write(new_text)
+    elif request.method == "PUT":
+        request_dict = request.json
+        try:
+            a_id = request_dict["article_id"]
+            new_text = request_dict["new_text"]
+            user = request_dict["user"]
+            date = request_dict["date"]
+        except:
+            return "bad parameters", 400
 
-    # add file record to db
-    db.session.add(newFile)
-    db.session.commit()
+        fileRecord = File.query.filter_by(article_id=a_id).first()
+        if not fileRecord:
+            return "file not found", 404
 
+        # overwrite file contents
+        with open(f"{BASE_DIR}/{a_id}.md", "w") as w:
+            w.write(new_text)
 
-  elif request.method == "PUT":
-    request_dict = request.json
-    try:
-        a_id = request_dict["article_id"]
-        new_text = request_dict["new_text"]
-        user = request_dict["user"]
-        date = request_dict["date"]
-    except:
-      return "bad parameters", 400
+        # update file record
+        fileRecord.date_modified = date
+        fileRecord.last_editor = user
+        db.session.commit()
 
-    fileRecord = File.query.filter_by(article_id=a_id).first()
-    if not fileRecord:
-      return "file not found", 404
+    elif request.method == "DELETE":
+        print(request.json, file=sys.stderr)
 
-    # overwrite file contents
-    with open(f"{BASE_DIR}/{a_id}.md", "w") as w:
-      w.write(new_text)
+        fileRecord = File.query.filter_by(article_id=a_id).first()
+        if not fileRecord:
+            return "file not found", 404
 
-    # update file record
-    fileRecord.date_modified = date
-    fileRecord.last_editor = user
-    db.session.commit()
+        # delete file
+        os.remove(f"{BASE_DIR}/{a_id}.md")
 
+        # delete db entry
+        db.session.delete(f)
+        db.session.commit()
 
-  elif request.method == "DELETE":
-    print(request.json, file=sys.stderr)
-
-    fileRecord = File.query.filter_by(article_id=a_id).first()
-    if not fileRecord:
-      return "file not found", 404
-
-    # delete file
-    os.remove(f"{BASE_DIR}/{a_id}.md")
-
-    # delete db entry
-    db.session.delete(f)
-    db.session.commit()
-
-
-  return "success", 200
+    return "success", 200
 
 
 # text summarizer
