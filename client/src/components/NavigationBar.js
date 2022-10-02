@@ -42,7 +42,7 @@ function NavigationBar() {
         <div>
           <ul>
             <li onClick={() => onClick("/")}>Home</li>
-            <li onClick={() => onClick("/a/ucla")}>Articles</li>
+            <li onClick={() => onClick("/articles")}>Articles</li>
             {editOrNew()}
             <li onClick={() => onClick("/stablediffusion")}>
               Can't Find an Image?

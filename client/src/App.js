@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 
 import { Home } from "./pages/Home";
+import { Articles } from "./pages/Articles";
 import { Article } from "./pages/Article";
 import { Edit } from "./pages/Edit";
 import { New } from "./pages/New";
@@ -24,6 +25,7 @@ function App() {
             <div className="body">
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/articles" element={<Articles />} />
                 <Route path="/a/:articleID" element={<Article />} />
                 <Route path="/e/:articleID" element={<Edit />} />
                 <Route path="/new" element={<New />} />

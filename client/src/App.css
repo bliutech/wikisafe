@@ -297,3 +297,24 @@ button:hover {
   font-family: var(--font-mono);
   font-size: calc(2 * var(--scale));
 }
+
+ul.articles {
+  display: inline-block;
+  width: 90%;
+}
+
+.articles > li {
+  list-style-type: none;
+  border: solid 1px black;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin: 1rem -1rem;
+}
+
+.articles > li:first-child {
+  margin: 0 -1rem;
+}
+
+.articles > li > p {
+  display: block;
+}
