@@ -19,6 +19,7 @@ function Article(props) {
   const { articleID } = useParams();
 
   const [summary, setSummary] = useState("");
+  const [loading, setLoading] = useState(false);
 
   function getTitle(text) {
     let start = text.indexOf("#") + 1;
@@ -50,7 +51,9 @@ function Article(props) {
   }, [props.text, articleID]);
 
   async function handleSummary() {
+    setLoading(true);
     const summaryRaw = await getSummary(article);
+    setLoading(false);
     setSummary(summaryRaw);
   }
 
@@ -62,7 +65,7 @@ function Article(props) {
         Did not want to read all that? Check out the summary by clicking the
         button below :)
       </figcaption>
-      <button onClick={handleSummary}>Summary</button>
+      <button onClick={handleSummary}>{loading ? "loading..." : "Summary"}</button>
       <div dangerouslySetInnerHTML={{ __html: toHTML(summary) }}></div>
     </div>
   );
