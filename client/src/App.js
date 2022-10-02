@@ -1,10 +1,11 @@
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import "./App.css";
 
 import { Home } from "./pages/Home";
 import { Article } from "./pages/Article";
 import { Edit } from "./pages/Edit";
+import { New } from "./pages/New";
 import { SignIn } from "./pages/SignIn";
 import { SignUp } from "./pages/SignUp";
 
@@ -14,7 +15,7 @@ function App() {
   return (
     <div>
       <div>
-        <HashRouter>
+        <BrowserRouter>
           <NavigationBar />
 
           <div className="content">
@@ -23,12 +24,13 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/a/:articleID" element={<Article />} />
                 <Route path="/e/:articleID" element={<Edit />} />
+                <Route path="/new" element={<New />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
               </Routes>
             </div>
           </div>
-        </HashRouter>
+        </BrowserRouter>
       </div>
     </div>
   );
