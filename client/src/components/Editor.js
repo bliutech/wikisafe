@@ -60,7 +60,7 @@ function Editor() {
       <br />
       <div className="editor-button">
         <div>
-          <button className="editor-caption" onClick={{}}>
+          <button className="editor-caption" onClick={handleCaption}>
             Generate Captions
           </button>
         </div>

@@ -5,7 +5,7 @@
 
 :root {
   /* sizes */
-  --scale: min(max(min(1vw, 1.5vh), 3.6px), 10.8px);
+  --scale: min(max(min(1vw, 1.4vh), 3.6px), 10.8px);
   --bar-ratio: 20;
   --page-width: min(
     calc(125 * var(--scale)),
@@ -107,7 +107,7 @@ img {
 figcaption {
   color: var(--color-text-sub);
   font-style: italic;
-  margin-top: calc(-2 * var(--scale));
+  margin: calc(-2 * var(--scale)) 0 calc(2 * var(--scale)) 0;
 }
 
 table,

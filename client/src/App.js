@@ -7,6 +7,7 @@ import { Article } from "./pages/Article";
 import { Edit } from "./pages/Edit";
 import { New } from "./pages/New";
 import { StableDiffusion } from "./pages/StableDiffusion";
+import { About } from "./pages/About";
 import { SignIn } from "./pages/SignIn";
 import { SignUp } from "./pages/SignUp";
 
@@ -27,6 +28,7 @@ function App() {
                 <Route path="/e/:articleID" element={<Edit />} />
                 <Route path="/new" element={<New />} />
                 <Route path="/stablediffusion" element={<StableDiffusion />} />
+                <Route path="/about" element={<About />} />
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/signup" element={<SignUp />} />
               </Routes>
