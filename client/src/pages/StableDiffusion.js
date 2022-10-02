@@ -61,7 +61,7 @@ function StableDiffusion() {
       {displayURL()}
       <Form
         formEntries={formEntries}
-        buttonText={loading ? "loading..." : "Generate"}
+        buttonText={loading ? "Loading..." : "Generate"}
         onClick={handleCaption}
       />
     </div>
