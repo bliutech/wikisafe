@@ -31,33 +31,33 @@ class User(db.Model):
 
 @app.post("/register")
 def register():
-    usr = request.form.get("usr")
-    pwd = request.form.get("pwd")
+    obj = request.json
+    usr = obj["usr"]
+    pwd = obj["pwd"]
+
+    res = {"username": None, "password": None}
 
     # error handling
-    if len(pwd) <= 0:
-        return "bad password", 400
-    if User.query.filter_by(username=usr):
-        return "account already exists", 401
+    if not User.query.filter_by(username=usr).first():
+        res["username"] = usr
+        res["password"] = pwd
+        # create user in db
+        user = User(username=usr, password=pwd)
+        db.session.add(user)
+        db.session.commit()
 
-    # create user in db
-    user = User(username=usr, password=pwd)
-    db.session.add(user)
-    db.session.commit()
-
-    return "success", 200
+    return res
 
 
 @app.post("/login")
 def login():
-    usr = request.form.get("usr")
-    pwd = request.form.get("pwd")
-    # error handling
-    # print(User.query.filter_by(username=usr).filter_by(password=pwd).first(), file=sys.stderr)
-    if not User.query.filter_by(username=usr).filter_by(password=pwd).first():
-        return None, 400
-    else:
-        return "success", 200
+    obj = request.json
+    usr = obj["usr"]
+
+    u = User.query.filter_by(username=usr).first()
+    pwd = u.password if u else None
+    res = {"username": usr, "password": pwd}
+    return json.dumps(res)
 
 
 # test functions; can remove in prod

@@ -1,10 +1,20 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 import { Form } from "../components/Form";
 
+import { createUser, getUser, changeUser, deleteUser } from "../api/users";
+
 function SignIn() {
-  const [username, setUsername] = useState(null);
-  const [password, setPassword] = useState(null);
+  document.title = "Sign In";
+
+  const [cookies, setCookie, removeCookie] = useCookies(["username"]);
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const formEntries = [
     {
@@ -24,13 +34,24 @@ function SignIn() {
 
   function handleEnter(key) {
     if (key == "Enter") {
-      handleSignUp();
+      handleSignIn();
     }
   }
 
-  async function handleSignUp() {
-    console.log("username:", username, "password:", password);
-    return;
+  async function handleSignIn() {
+    const user = await getUser(username);
+
+    if (user.password === password) {
+      // check that password matches
+      setCookie("username", username, { path: "/" });
+      navigate("/");
+      return;
+    }
+    // username does not exist OR password does not match
+    window.alert(
+      "The username or password is incorrect. " +
+        "Did you mean to sign up instead?"
+    );
   }
 
   return (
@@ -38,8 +59,8 @@ function SignIn() {
       <h1>Sign In</h1>
       <Form
         formEntries={formEntries}
-        buttonText="Sign Up"
-        onClick={handleSignUp}
+        buttonText="Sign In"
+        onClick={handleSignIn}
       />
     </div>
   );

@@ -1,31 +1,46 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 import { Article } from "../pages/Article";
 
-import { articles } from "../api/articles";
+import {
+  createArticle,
+  getArticle,
+  changeArticle,
+  deleteArticle,
+} from "../api/articles";
 
 function Editor() {
+  const [cookies, setCookie, removeCookie] = useCookies(["username"]);
+  const username = cookies.username;
+
   const [editorText, setEditorText] = useState(null);
   const { articleID } = useParams();
+
+  const navigate = useNavigate();
 
   function handleEditorText(event) {
     setEditorText(event.target.value);
   }
 
   useEffect(() => {
-    if (editorText === null) {
-      let articlePlain = articles(articleID);
-      setEditorText(articlePlain);
+    async function handleText() {
+      if (editorText === null) {
+        const articlePlain = await getArticle(articleID);
+        setEditorText(articlePlain);
+      }
     }
+    handleText();
   }, [editorText, articleID]);
 
   function handleCancel() {
     return;
   }
 
-  function handleSave() {
-    return;
+  async function handleSave() {
+    let callback = () => window.location.reload();
+    changeArticle(articleID, editorText, username, (callback = callback));
   }
 
   return (

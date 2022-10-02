@@ -138,16 +138,14 @@ td {
 }
 
 .navigation-bar li {
+  color: var(--color-text-body);
+  text-decoration: none;
   padding: 0 0 calc(1 * var(--scale)) 0;
 }
 
-.navigation-bar li a {
-  color: var(--color-text-body);
-  text-decoration: none;
-}
-
-.navigation-bar li a:hover {
+.navigation-bar li:hover {
   color: var(--color-text-link-emph);
+  cursor: pointer;
 }
 
 .navigation-account {
