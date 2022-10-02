@@ -305,14 +305,14 @@ ul.articles {
 
 .articles > li {
   list-style-type: none;
-  border: solid 1px black;
-  border-radius: 1rem;
-  padding: 1rem;
-  margin: 1rem -1rem;
+  border: solid calc(0.15 * var(--scale)) black;
+  border-radius: calc(1 * var(--scale));
+  padding: 0 calc(2 * var(--scale)) 0 calc(2 * var(--scale));
+  margin: calc(2.5 * var(--scale)) calc(-2 * var(--scale));
 }
 
 .articles > li:first-child {
-  margin: 0 -1rem;
+  margin: 0 calc(-2 * var(--scale));
 }
 
 .articles > li > p {
@@ -330,5 +330,5 @@ ul.articles {
 }
 
 .home-image-container > img {
-  width: 33.3%;
+  width: 33.333333333%;
 }

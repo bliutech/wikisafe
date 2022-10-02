@@ -211,7 +211,7 @@ def summarize():
 def stable_diffusion():
     request_dict = request.json
     prompt = request_dict["prompt"]
-    os.environ["REPLICATE_API_TOKEN"] = "6cdf7546f955d96f4db3508022a5f126022fc105"
+    os.environ["REPLICATE_API_TOKEN"] = "bc63ed6d1154de3b6e37ceeac61ba9f71b6fefcb"
     model = replicate.models.get("stability-ai/stable-diffusion")
     image_url = model.predict(prompt=prompt)
     print(image_url, file=sys.stderr)
@@ -220,7 +220,7 @@ def stable_diffusion():
 
 def CLIP(image_link):
     # Get caption for image
-    os.environ["REPLICATE_API_TOKEN"] = "6cdf7546f955d96f4db3508022a5f126022fc105"
+    os.environ["REPLICATE_API_TOKEN"] = "bc63ed6d1154de3b6e37ceeac61ba9f71b6fefcb"
     model = replicate.models.get("rmokady/clip_prefix_caption")
     return model.predict(image=image_link)
 

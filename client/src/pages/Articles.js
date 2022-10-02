@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { getArticle, getArticles } from "../api/articles";
 
@@ -28,25 +28,25 @@ function ArticleCard({ article }) {
     }
     getAllArticles();
   }, []);
+
+  const navigate = useNavigate();
+
   return (
-    <>
+    <span>
       <p>
-        <strong>Article: </strong>
-        <Link to={"/a/" + article.articleId}>{name}</Link>
-      </p>
-      <p>
-        <strong>Author:</strong> {article.author}
-      </p>
-      <p>
+        <b>
+          <Link to={"/a/" + article.articleId}>{name}</Link>
+        </b>{" "}
+        <br />
+        <strong>Author: </strong>
+        {article.author} <br />
         <strong>Created: </strong> {getDate(article.date_created)}
-      </p>
-      <p>
+        <br />
         <strong>Last Editor: </strong> {article.last_editor}
-      </p>
-      <p>
+        <br />
         <strong>Last Modified: </strong> {getDate(article.date_modified)}
       </p>
-    </>
+    </span>
   );
 }
 

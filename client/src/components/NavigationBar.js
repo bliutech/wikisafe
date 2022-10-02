@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
@@ -12,7 +12,9 @@ function NavigationBar() {
   const navigate = useNavigate();
 
   function onClick(link) {
-    navigate(link);
+    if (link !== null) {
+      navigate(link);
+    }
     setPathname(window.location.pathname);
   }
 
@@ -20,6 +22,10 @@ function NavigationBar() {
     removeCookie("username", { path: "/" });
     window.location.reload();
   }
+
+  useEffect(() => {
+    onClick(null);
+  }, [window.location.pathname]);
 
   function editOrNew() {
     let articleIDArticle = pathname.indexOf("/a/");
