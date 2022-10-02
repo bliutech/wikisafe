@@ -1,3 +1,4 @@
+// application
 App = {
   loading: false,
   contracts: {},
