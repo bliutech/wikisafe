@@ -9,7 +9,7 @@ See Wikisafe live at [http://54.215.107.134:8000/](http://54.215.107.134:8000/).
 Developed for [HackMIT 2022](https://hackmit.org/).
 
 ## 📝Authors 📝
-Wikisafe  was made for HackMIT 2022, by Team **PB & J & J**&mdash;Prateik Siahi, Benson Liu, Jeffrey Kwan, and Jordan Lin.
+Wikisafe  was made for HackMIT 2022, by Team **PB & J & J**&mdash;Prateik Sinha, Benson Liu, Jeffrey Kwan, and Jordan Lin.
 
 ## 💻 Languages & Tools 💻
 
