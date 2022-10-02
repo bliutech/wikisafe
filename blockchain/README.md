@@ -3,6 +3,6 @@
 ```
 npm i
 truffle compile
-truffle migrations
+truffle migrate
 npm run dev
 ```
