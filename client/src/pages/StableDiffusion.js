@@ -5,6 +5,8 @@ import { Form } from "../components/Form";
 import { getImage } from "../api/ml";
 
 function StableDiffusion() {
+  document.title = "Stable Diffusion";
+
   /* default to transparent image */
   const [imageURL, setImageURL] = useState(
     "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"

@@ -12,6 +12,8 @@ import {
 } from "../api/articles";
 
 function New() {
+  document.title = "New Article";
+
   const [cookies, setCookie, removeCookie] = useCookies(["username"]);
   const username = cookies.username;
 

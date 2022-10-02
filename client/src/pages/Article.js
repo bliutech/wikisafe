@@ -12,9 +12,13 @@ import {
   deleteArticle,
 } from "../api/articles";
 
+import { getSummary } from "../api/ml";
+
 function Article(props) {
   const [article, setArticle] = useState("");
   const { articleID } = useParams();
+
+  const [summary, setSummary] = useState("");
 
   function getTitle(text) {
     let start = text.indexOf("#") + 1;
@@ -29,6 +33,7 @@ function Article(props) {
   function toHTML(text) {
     let textHTML = marked.parse(text);
     textHTML = DOMPurify.sanitize(textHTML); // very important for security!
+    document.title = getTitle(article);
     return textHTML;
   }
 
@@ -38,15 +43,29 @@ function Article(props) {
         setArticle(props.text);
       } else {
         const articlePlain = await getArticle(articleID);
-        console.log(articlePlain);
         setArticle(articlePlain);
       }
     }
     handleArticle();
-    document.title = getTitle(article);
   }, [props.text, articleID]);
 
-  return <div dangerouslySetInnerHTML={{ __html: toHTML(article) }}></div>;
+  async function handleSummary() {
+    const summaryRaw = await getSummary(article);
+    setSummary(summaryRaw);
+  }
+
+  return (
+    <div>
+      <div dangerouslySetInnerHTML={{ __html: toHTML(article) }}></div>
+      <h1>TL;DR</h1>
+      <figcaption>
+        Did not want to read all that? Check out the summary by clicking the
+        button below :)
+      </figcaption>
+      <button onClick={handleSummary}>Summary</button>
+      <div dangerouslySetInnerHTML={{ __html: toHTML(summary) }}></div>
+    </div>
+  );
 }
 
 export { Article };

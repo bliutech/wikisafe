@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 
 function Home() {
-  document.title = "WikiSafe";
+  document.title = "Wikisafe";
 
   return (
     <div>
-      <h1>WikiSafe</h1>
+      <h1>Wikisafe</h1>
 
       <figcaption>
         A crowdsourced knowledge database powered by ML and blockchain.
