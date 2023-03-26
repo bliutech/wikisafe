@@ -1,2 +1,2 @@
 * text=auto eol=lf
-*.ipynb linguist-language=python
+*.ipynb linguist-vendored
